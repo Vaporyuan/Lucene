@@ -1,0 +1,50 @@
+apply plugin: 'java-library'
+
+
+
+tasks.withType(JavaCompile) {
+    options.fork = true
+}
+
+dependencies {
+
+
+    //testImplementation "androidx.appcompat:appcompat:auto"
+    //testImplementation "junit:junit:${JUNIT_VERSION}"
+    //testImplementation "org.mockito:mockito-core:${MOCKITO_VERSION}"
+    //testImplementation "org.robolectric:robolectric:${ROBOLECTRIC_VERSION}"
+    //testImplementation "com.squareup.okhttp3:mockwebserver:${MOCKWEBSERVER_VERSION}"
+    //testImplementation (libs_v4)
+}
+
+//check.dependsOn(':library:findbugs:findbugs')
+//check.dependsOn(':library:pmd:pmd')
+//check.dependsOn(':library:test:check')
+
+// Used in pmd and findbugs subprojects.
+//@SuppressWarnings("GroovyUnusedDeclaration")
+//def classPathForQuality() {
+//    return files(
+//            android.bootClasspath,
+//            project.configurations.compile,
+//            project.android.libraryVariants.collect { it.javaCompile.classpath }
+//    )
+//}
+
+//apply from: "${rootProject.projectDir}/scripts/upload.gradle"
+
+apply plugin: 'maven-publish'
+publishing {
+    publications {
+        maven(MavenPublication) {
+            //artifact "build\\outputs\\aar\\glide-debug.aar"
+            from components.java
+            //println components.properties
+            //from components.wtf
+            groupId "org.appxmod.lucene"
+            artifactId "Core"
+            version "1.0.0"
+        }
+    }
+}
+build.finalizedBy publishToMavenLocal
