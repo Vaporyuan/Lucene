@@ -20,9 +20,9 @@ import java.io.Reader;
  */
 
 /** Internal class to enable reuse of the string reader by {@link Analyzer#tokenStream(String,String)} */
-final class ReusableStringReader extends Reader {
+public final class ReusableStringReader extends Reader {
   private int pos = 0, size = 0;
-  private String s = null;
+  public String s = null;
   
   void setValue(String s) {
     this.s = s;

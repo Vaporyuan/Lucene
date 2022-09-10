@@ -301,9 +301,9 @@ public class Field implements IndexableField {
    * </p>
    */
   public void setStringValue(String value) {
-    if (!(fieldsData instanceof String)) {
-      throw new IllegalArgumentException("cannot change value type from " + fieldsData.getClass().getSimpleName() + " to String");
-    }
+//    if (!(fieldsData instanceof String)) {
+//      throw new IllegalArgumentException("cannot change value type from " + fieldsData.getClass().getSimpleName() + " to String");
+//    }
     fieldsData = value;
   }
   

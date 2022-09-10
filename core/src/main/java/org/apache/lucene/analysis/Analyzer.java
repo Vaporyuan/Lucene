@@ -182,6 +182,7 @@ public abstract class Analyzer implements Closeable {
     } else {
       components.setReader(r);
     }
+    components.text = text;
     components.reusableStringReader = strReader;
     return components.getTokenStream();
   }
@@ -267,9 +268,10 @@ public abstract class Analyzer implements Closeable {
     protected final TokenStream sink;
     
     /** Internal cache only used by {@link Analyzer#tokenStream(String, String)}. */
-    transient ReusableStringReader reusableStringReader;
-
-    /**
+	public transient ReusableStringReader reusableStringReader;
+    public String text;
+	
+	  /**
      * Creates a new {@link TokenStreamComponents} instance.
      * 
      * @param source
