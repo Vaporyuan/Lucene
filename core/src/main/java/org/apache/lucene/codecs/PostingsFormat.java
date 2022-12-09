@@ -18,9 +18,11 @@ package org.apache.lucene.codecs;
  */
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import org.apache.lucene.codecs.lucene41.Lucene41PostingsFormat;
 import org.apache.lucene.codecs.perfield.PerFieldPostingsFormat; // javadocs
 import org.apache.lucene.index.SegmentWriteState;
 import org.apache.lucene.index.SegmentReadState;
@@ -90,14 +92,17 @@ public abstract class PostingsFormat implements NamedSPILoader.NamedSPI {
   public String toString() {
     return "PostingsFormat(name=" + name + ")";
   }
-  
+	
+	static PostingsFormat fmt;
   /** looks up a format by name */
   public static PostingsFormat forName(String name) {
-    if (loader == null) {
-      throw new IllegalStateException("You called PostingsFormat.forName() before all formats could be initialized. "+
-          "This likely happens if you call it from a PostingsFormat's ctor.");
-    }
-    return loader.lookup(name);
+	  System.out.println("fatal PostingsFormat forName::"+name);
+	  return fmt!=null?fmt:(fmt=new Lucene41PostingsFormat());
+//    if (loader == null) {
+//      throw new IllegalStateException("You called PostingsFormat.forName() before all formats could be initialized. "+
+//          "This likely happens if you call it from a PostingsFormat's ctor.");
+//    }
+//    return loader.lookup(name);
   }
   
   /** returns a list of all available format names */

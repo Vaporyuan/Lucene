@@ -17,6 +17,8 @@ package org.apache.lucene.util;
  * limitations under the License.
  */
 
+import org.apache.lucene.codecs.lucene46.Lucene46Codec;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.BufferedReader;
@@ -132,6 +134,8 @@ public final class SPIClassIterator<S> implements Iterator<Class<? extends S>> {
     }
     assert linesIterator.hasNext();
     final String c = linesIterator.next();
+	
+	// here
     try {
       // don't initialize the class (pass false as 2nd parameter):
       return Class.forName(c, false, loader).asSubclass(clazz);

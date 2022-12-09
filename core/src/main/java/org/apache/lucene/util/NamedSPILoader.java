@@ -17,6 +17,8 @@ package org.apache.lucene.util;
  * limitations under the License.
  */
 
+import org.apache.lucene.codecs.lucene46.Lucene46Codec;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -61,22 +63,22 @@ public final class NamedSPILoader<S extends NamedSPILoader.NamedSPI> implements 
   public synchronized void reload(ClassLoader classloader) {
     final LinkedHashMap<String,S> services = new LinkedHashMap<String,S>(this.services);
     final SPIClassIterator<S> loader = SPIClassIterator.get(clazz, classloader);
-    while (loader.hasNext()) {
-      final Class<? extends S> c = loader.next();
-      try {
-        final S service = c.newInstance();
-        final String name = service.getName();
-        // only add the first one for each name, later services will be ignored
-        // this allows to place services before others in classpath to make 
-        // them used instead of others
-        if (!services.containsKey(name)) {
-          checkServiceName(name);
-          services.put(name, service);
-        }
-      } catch (Exception e) {
-        throw new ServiceConfigurationError("Cannot instantiate SPI class: " + c.getName(), e);
-      }
-    }
+//    while (loader.hasNext()) {
+//      final Class<? extends S> c = loader.next();
+//      try {
+//        final S service = c.newInstance();
+//        final String name = service.getName();
+//        // only add the first one for each name, later services will be ignored
+//        // this allows to place services before others in classpath to make
+//        // them used instead of others
+//        if (!services.containsKey(name)) {
+//          checkServiceName(name);
+//          services.put(name, service);
+//        }
+//      } catch (Exception e) {
+//        throw new ServiceConfigurationError("Cannot instantiate SPI class: " + c.getName(), e);
+//      }
+//    }
     this.services = Collections.unmodifiableMap(services);
   }
   
@@ -103,12 +105,16 @@ public final class NamedSPILoader<S extends NamedSPILoader.NamedSPI> implements 
     return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9');
   }
   
+  S codec;
   public S lookup(String name) {
-    final S service = services.get(name);
-    if (service != null) return service;
-    throw new IllegalArgumentException("A SPI class of type "+clazz.getName()+" with name '"+name+"' does not exist. "+
-     "You need to add the corresponding JAR file supporting this SPI to your classpath."+
-     "The current classpath supports the following names: "+availableServices());
+	System.out.println("fatal NamedSPILoader lookup::"+name);
+	// here
+	final S service = services.get(name);
+	if (service != null) return service;
+	return codec==null?codec=(S) new Lucene46Codec():codec;
+//    throw new IllegalArgumentException("A SPI class of type "+clazz.getName()+" with name '"+name+"' does not exist. "+
+//     "You need to add the corresponding JAR file supporting this SPI to your classpath."+
+//     "The current classpath supports the following names: "+availableServices());
   }
 
   public Set<String> availableServices() {
